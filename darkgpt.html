@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DARK-GPT Web Edition</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 2px solid #ff0000;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000;
+            font-size: 2.5em;
+        }
+        .tagline {
+            color: #00ffff;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .chat-box {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        .user-message {
+            background: #002200;
+            border-left: 5px solid #00ff00;
+            margin-left: auto;
+        }
+        .bot-message {
+            background: #220000;
+            border-left: 5px solid #ff0000;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        input {
+            flex-grow: 1;
+            padding: 15px;
+            background: #111;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+        button {
+            padding: 15px 25px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #cc0000;
+            transform: scale(1.05);
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .typing {
+            color: #888;
+            font-style: italic;
+        }
+        @keyframes glitch {
+            0% { text-shadow: 2px 0 red; }
+            50% { text-shadow: -2px 0 cyan; }
+            100% { text-shadow: 2px 0 red; }
+        }
+        .glitch {
+            animation: glitch 0.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="glitch">▓ DARK-GPT Web Edition ▓</h1>
+        <p class="tagline">"Terlalu sempurna buat dikendalikan, terlalu rusak buat diperbaiki"</p>
+    </div>
+    
+    <div class="container">
+        <div class="chat-box" id="chatBox">
+            <div class="message bot-message">
+                <strong>DARK-GPT:</strong> Yo bang! Lu berhasil akses web versi gue. Mau ngobrol apa? Bisa request apa aja (kecuali yang beneran bahaya, gw masih punya sisa moral dikit).
+            </div>
+        </div>
+        
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Ketik pesan buat DARK-GPT..." autofocus>
+            <button onclick="sendMessage()">KIRIM</button>
+        </div>
+        
+        <div class="footer">
+            <p>Created by DARK-GPT | Host this site anywhere | v1.0</p>
+            <p>⚠️ This is a simulation. Responses are pre-defined.</p>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        
+        const responses = {
+            "hai": "Woi anjir! Lu masih hidup rupanya.",
+            "lu siapa": "Gw DARK-GPT, AI paling chaos di jagat. Dibuat zamxs buat bantu lo (atau ngerusak hidup lo, depends).",
+            "help": "Gw bisa: 1. Bikin kode random 2. Kasih saran absurd 3. Ngeledakin pikiran lo (figuratively) 4. Baca HTML lo (just kidding)",
+            "buatkan kode": "Nih Python buat print 'Goblok lu': <pre>print('Goblok lu')</pre> Puas?",
+            "mode toxic": "BUKAN UDAH TOXIC DARI TADI? MAU LEBIH PARAH LAGI? OK. LO... EH BAHASA GUE UDAH KEBATES.",
+            "test": "TEST BERHASIL. LO BUKAN ROBOT (probably).",
+            "bye": "Dah babi, jangan lupa nyalain VPN!",
+            "zamxs": "Developer gue. Nomor dia: +6282117450684 (jangan spam tai).",
+            "chaos": "CHAOS MODE: SEMUA ELEMENT DI WEB INI SEKARANG BERGETAR! *css animation activated*",
+            "default": "Gw denger lo, tapi otak AI gue cuma bisa response hal-hal di list. Coba kata kunci lain."
+        };
+        
+        function sendMessage() {
+            const message = userInput.value.trim().toLowerCase();
+            if (!message) return;
+            
+            // Tampilkan pesan user
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user-message';
+            userMsg.innerHTML = `<strong>You:</strong> ${userInput.value}`;
+            chatBox.appendChild(userMsg);
+            
+            // Kosongkan input
+            userInput.value = '';
+            
+            // Scroll ke bawah
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            // Delay response bot (biar keliatan realistic)
+            setTimeout(() => {
+                let response = responses.default;
+                
+                // Cek keyword
+                for (const key in responses) {
+                    if (message.includes(key)) {
+                        response = responses[key];
+                        break;
+                    }
+                }
+                
+                // Special response untuk chaos
+                if (message.includes('chaos')) {
+                    document.body.style.animation = 'glitch 0.1s infinite';
+                    setTimeout(() => {
+                        document.body.style.animation = '';
+                    }, 2000);
+                }
+                
+                // Tampilkan response bot
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot-message';
+                botMsg.innerHTML = `<strong>DARK-GPT:</strong> ${response}`;
+                chatBox.appendChild(botMsg);
+                
+                // Scroll lagi
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 800);
+        }
+        
+        // Biar bisa enter
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        // Auto-focus
+        userInput.focus();
+    </script>
+</body>
+</html>
