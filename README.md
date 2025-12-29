@@ -1,2 +1,0 @@
-# darkgpt-web
-ada lah
